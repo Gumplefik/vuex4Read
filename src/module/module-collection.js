@@ -8,11 +8,13 @@ export default class ModuleCollection {
   }
 
   get (path) {
+    // 这里的path就是树的路径，不断获取children
     return path.reduce((module, key) => {
       return module.getChild(key)
     }, this.root)
   }
 
+  // 通过 / 拼接命名空间
   getNamespace (path) {
     let module = this.root
     return path.reduce((namespace, key) => {
@@ -25,8 +27,10 @@ export default class ModuleCollection {
     update([], this.root, rawRootModule)
   }
 
+  // rawModule就是options
   register (path, rawModule, runtime = true) {
     if (__DEV__) {
+      // 检查传参的类型
       assertRawModule(path, rawModule)
     }
 
@@ -34,12 +38,14 @@ export default class ModuleCollection {
     if (path.length === 0) {
       this.root = newModule
     } else {
+      // 获得树的最小子节点，它是Module的实例
       const parent = this.get(path.slice(0, -1))
       parent.addChild(path[path.length - 1], newModule)
     }
 
     // register nested modules
     if (rawModule.modules) {
+      // 注册子模块
       forEachValue(rawModule.modules, (rawChildModule, key) => {
         this.register(path.concat(key), rawChildModule, runtime)
       })
@@ -114,6 +120,7 @@ function assertRawModule (path, rawModule) {
 
     const assertOptions = assertTypes[key]
 
+    // 检查类型
     forEachValue(rawModule[key], (value, type) => {
       assert(
         assertOptions.assert(value),

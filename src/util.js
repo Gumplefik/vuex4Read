@@ -65,6 +65,7 @@ export function assert (condition, msg) {
   if (!condition) throw new Error(`[vuex] ${msg}`)
 }
 
+// 工厂函数创建执行函数
 export function partial (fn, arg) {
   return function () {
     return fn(arg)

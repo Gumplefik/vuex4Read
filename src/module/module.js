@@ -11,10 +11,12 @@ export default class Module {
     const rawState = rawModule.state
 
     // Store the origin module's state
+    // 兼容函数，对象以及空值
     this.state = (typeof rawState === 'function' ? rawState() : rawState) || {}
   }
 
   get namespaced () {
+    // 是否要命名
     return !!this._rawModule.namespaced
   }
 
